@@ -236,6 +236,8 @@
 <?php $periodes=$periodes??[];
       $moyenne=$moyenne??0;
       $actif=$actif ?? "";
+      // var_dump($notes);
+       $notes   = $notes ?? [];
       $user= $_SESSION['user']['email'] ?? "";
       $userRole= $_SESSION['user']['nomrole'] ?? "";
       $nomcomplet= $_SESSION['user']['nomcomplet'] ?? "";
@@ -350,25 +352,25 @@
       </thead>
       <tbody id="tbody">
    
-
+              <?php foreach($notes as $note): ?>
         <tr>  
         <td>
           <div class="eleve-cell">
-            <div class="idx" style="display:inline-block;width:18px;"></div>
+            <div class="idx" style="display:inline-block;width:18px;"><?php echo $note['eleve_id']?></div>
             <div class="avatar"></div>
             <div>
-              <div class="eleve-name"></div>
-              <div class="eleve-id"></div>
+              <div class="eleve-name"><?php echo $note['prenom']." " . $note['nom'] ?></div>
+              <div class="eleve-id"><?php echo $note['matricule']?></div>
             </div>
           </div>
         </td>
         <td><input class="grade-input" type="number" min="0" max="20" step="0.5" value="${s.d1}" data-field="d1" data-idx="${i}" placeholder="<?php echo $note['devoir1']?>"></td>
         <td><input class="grade-input" type="number" min="0" max="20" step="0.5" value="${s.d2}" data-field="d2" data-idx="${i}" placeholder="<?php echo $note['devoir2']?>"></td>
         <td><input class="grade-input comp" type="number" min="0" max="20" step="0.5" value="${s.comp}" data-field="comp" data-idx="${i}" placeholder="<?php echo $note['composition']?>"></td>
-        <td><span class="moyenne-val" data-moy="${i}"></span></td>
+        <td><span class="moyenne-val" data-moy="${i}"><?php echo $note['moyenne_eleve']?></span></td>
         <td><span class="pill" data-app="${i}"><span class="pdot"></span><span class="app-label"></span><?php echo $note['appreciation']?></span></td>
         </tr>
-    
+                <?php endforeach ?>
       </tbody>
       <tfoot>
         <tr><td colspan="6">Navigation clavier disponible · valeurs limitées de 0 à 20</td></tr>

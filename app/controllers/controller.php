@@ -17,7 +17,7 @@ function saveNote(): void {
         
        
        $moyenne = getMoyenne($idclasse, $idMatiere, $idPeriode);
-        
+        $notes   = getListe($idclasse, $idMatiere, $idPeriode);
         
     }
    
