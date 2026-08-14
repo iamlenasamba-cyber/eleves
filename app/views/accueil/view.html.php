@@ -241,7 +241,7 @@
       $user= $_SESSION['user']['email'] ?? "";
       $userRole= $_SESSION['user']['nomrole'] ?? "";
       $nomcomplet= $_SESSION['user']['nomcomplet'] ?? "";
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
       // var_dump($actif['annee']); ?>
 
 <header class="topbar">

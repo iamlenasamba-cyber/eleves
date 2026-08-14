@@ -1,6 +1,6 @@
 <?php
-
-function connexionDB(): PDO {
+class Database {
+public function connexionDB(): PDO {
     try {
         $pdo = new PDO(
             "pgsql:host=127.0.0.1;dbname=gestioneleves;port=5432",
@@ -18,7 +18,7 @@ function connexionDB(): PDO {
 }
 
 
-function deconnecteDB():PDO{
+ public function deconnecteDB():PDO{
 
 static $pdo = null;
 
@@ -40,37 +40,40 @@ $pdo = new PDO(
 }
 
 
-function query(PDO $pdo,string $sql, bool $single = true):array{
+ public function query(PDO $pdo,string $sql, bool $single = true):array{
      $query = $pdo->query($sql);
-    return $single ? $query->fetch():$query->fetchAll();
+   $result = $single ? $query->fetch() : $query->fetchAll();
+return $result ?: [];
     
 
 }
 
-function prepare(PDO $pdo,string $sql, array $datas) {
+public function prepare(PDO $pdo,string $sql, array $datas) {
     $prepare = $pdo->prepare($sql);
     $prepare->execute($datas);
     return $prepare;
 }
 
-function executeQuery(PDO $pdo,string $sql, array $datas, bool $single = true) : array {
-    $statement= prepare($pdo, $sql,  $datas);
+public function executeQuery(PDO $pdo,string $sql, array $datas, bool $single = true) : array {
+   $statement = $this->prepare($pdo, $sql, $datas);
    
     $result= $single ? $statement->fetch():$statement->fetchAll();
     return $result ?: [];
 }
 
-function executeUpdate(PDO $pdo, string $sql, array $datas) : int {
-    $stmt = prepare($pdo, $sql, $datas); // Stocker dans une variable $stmt
+public function executeUpdate(PDO $pdo, string $sql, array $datas) : int {
+    $stmt = $this->prepare($pdo, $sql, $datas);
     
     return (str_starts_with(strtoupper($sql), 'INSERT')) ? (int)$pdo->lastInsertId() : $stmt->rowCount();
 }
 
 
-function getAllTables (string $tableName): array{
-    $pdo=connexionDB();
-    $sql="SELECT * FROM $tableName";
-    $result= query( $pdo,$sql,false);
-    $pdo=null;
+public function getAllTables(string $tableName): array {
+    $pdo = $this->connexionDB();
+    $sql = "SELECT * FROM $tableName";
+    $result = $this->query($pdo, $sql, false); 
+    $pdo = null;
     return $result;
+}
+
 }

@@ -1,29 +1,37 @@
 <?php
 
-require_once dirname(__DIR__) . "/models/noteModel.php";
+ require_once dirname(__DIR__) . "/models/noteModel.php";
 require_once dirname(__DIR__) . "/models/anneeModel.php";
 
-function saveNote(): void {
+class Controller {
+    public NoteModel $noteModel;
+     public AnneeModel $anneeModel;
 
+ public function __construct() {
+         $this->noteModel = new NoteModel();
+        $this->anneeModel = new AnneeModel();
+  }
 
-   
-  
-    if($_SERVER['REQUEST_METHOD']=='POST'){
-       
-         $idclasse= (int) $_POST['idClasse'];
-          
-         $idMatiere= (int)$_POST['idMatiere'];
-         $idPeriode=(int) $_POST['idPeriode'];
-        
-       
-       $moyenne = getMoyenne($idclasse, $idMatiere, $idPeriode);
-        $notes   = getListe($idclasse, $idMatiere, $idPeriode);
-        
+    public function saveNote(): void {
+        $moyenne = ['moyenne' => 0];
+        $notes = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $idclasse  = (int) $_POST['idClasse'];
+             $idMatiere = (int) $_POST['idMatiere'];
+            $idPeriode = (int) $_POST['idPeriode'];
+
+             $moyenne = $this->noteModel->getMoyenne($idclasse, $idMatiere, $idPeriode);
+            $notes   = $this->noteModel->getListe($idclasse, $idMatiere, $idPeriode);
+        }
+
+ 
+         $classes  = $this->noteModel->db->getAllTables('classes');
+        $matieres = $this->noteModel->db->getAllTables('matieres');
+         $periodes = $this->noteModel->db->getAllTables('periodes');
+
+        $actif = $this->anneeModel->getAnnee();
+
+             require_once dirname(__DIR__) . "/views/accueil/view.html.php";
     }
-   
-    $classes=getAllTables('classes');
-    $matieres=getAllTables('matieres');
-    $periodes=getAllTables('periodes');
-    $actif=getAnnee();
-    require_once dirname(__DIR__) . "/views/accueil/view.html.php";
 }
